@@ -1,10 +1,7 @@
-import re
-from tkinter import CASCADE
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxLengthValidator, MinLengthValidator
-
 
 from titles.models import Title
 
