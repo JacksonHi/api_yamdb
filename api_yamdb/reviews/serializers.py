@@ -1,11 +1,11 @@
 from rest_framework import serializers
+from rest_framework.relations import SlugRelatedField
 
 from .models import Review, Comments
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    author = ...
-    title = ...
+    author = SlugRelatedField(slug_field='username', read_only=True)
     
     class meta:
         model = Review
@@ -13,7 +13,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CommentsSerializer(serializers.ModelSerializer):
-    author = ...
+    author = SlugRelatedField(slug_field='username', read_only=True)
     review = ...
 
     class meta:
