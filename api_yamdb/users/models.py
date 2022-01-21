@@ -1,14 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-ROL_USER = 'user'
-ROL_MODERATOR = 'moderator'
-ROL_ADMIN = 'admin'
+ROLE_USER = 'user'
+ROLE_MODERATOR = 'moderator'
+ROLE_ADMIN = 'admin'
 
 ROLES = [
-    (ROL_USER, 'Пользователь'),
-    (ROL_MODERATOR, 'Модератор'),
-    (ROL_ADMIN, 'Администратор')
+    (ROLE_USER, 'Пользователь'),
+    (ROLE_MODERATOR, 'Модератор'),
+    (ROLE_ADMIN, 'Администратор')
 ]
 
 

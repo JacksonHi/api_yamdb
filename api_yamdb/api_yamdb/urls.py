@@ -25,4 +25,5 @@ urlpatterns = [
         name='redoc'
     ),
     path('api/', include('titles.urls')),
+    path('api/', include('reviews.urls', namespace='reviews')),
 ]
