@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 from rest_framework.validators import UniqueValidator
 
 from users.models import User
@@ -9,7 +9,7 @@ class TokenSerializer(serializers.Serializer):
 
     def validate_username(self, value):
         if not User.objects.filter(username=value).exists():
-            raise serializers.ValidationError(f'There is no user {value}')
+            raise exceptions.NotFound(f'There is no user {value}')
         return value
 
     
