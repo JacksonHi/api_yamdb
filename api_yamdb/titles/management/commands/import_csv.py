@@ -1,8 +1,7 @@
 import os
 import csv
 
-from django.core.management.base import BaseCommand, CommandError
-from django.forms import models
+from django.core.management.base import BaseCommand
 from titles.models import Category, Genre, Title, TitleGenre
 from reviews.models import Comments, Review
 from users.models import User
@@ -32,7 +31,8 @@ def file_load(model_orm, file_name_csv):
 
 
 class Command(BaseCommand):
-    help = 'Load data from csv. Если не проходят миграции или загрузка данных нужно выполить python manage.py migrate titles zero'
+    help = ('Load data from csv. Если не проходят миграции или загрузка данных'
+            ' нужно выполить python manage.py migrate titles zero')
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -56,7 +56,7 @@ class Command(BaseCommand):
         if 'genre.csv' in file_list:
             self.stdout.write('genre')
             file_load(Genre, file_path + '\\genre.csv')
-        
+
         if 'users.csv' in file_list:
             self.stdout.write('users')
             file_load(User, file_path + '\\users.csv')
@@ -68,7 +68,7 @@ class Command(BaseCommand):
         if 'review.csv' in file_list:
             self.stdout.write('review')
             file_load(Review, file_path + '\\review.csv')
-        
+
         if 'comments.csv' in file_list:
             self.stdout.write('***********comments')
             file_load(Comments, file_path + '\\comments.csv')
@@ -76,5 +76,5 @@ class Command(BaseCommand):
         if 'genre_title.csv' in file_list:
             self.stdout.write('*************genre_title')
             file_load(TitleGenre, file_path + '\\genre_title.csv')
+
         self.stdout.write('*************загрузка завершена**************')
-        

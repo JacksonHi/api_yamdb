@@ -12,7 +12,7 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
-        super().save(*args, **kwargs)        
+        super().save(*args, **kwargs)
 
 
 class Genre(models.Model):
@@ -23,7 +23,7 @@ class Genre(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
         super().save(*args, **kwargs)
-        
+
     def __str__(self):
         return self.name[:50]
 
