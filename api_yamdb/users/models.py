@@ -21,7 +21,7 @@ class CustomUserManager(UserManager):
             raise ValueError('"me" is invalid username')
         return super().create_user(username, email=email, password=password, **extra_fields)
 
-    def create_superuser(self, username, email, password, **extra_fields):
+    def create_superuser(self, username, email, password, role, **extra_fields):
         return super().create_superuser(username, email, password, role='admin', **extra_fields)
 
 
