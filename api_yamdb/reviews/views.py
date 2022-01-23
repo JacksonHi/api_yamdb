@@ -8,8 +8,8 @@ from .serializers import ReviewSerializer, CommentsSerializer
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permissions_classes = [
-        permissions.IsAuthenticated
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly
     ]
 
     def perform_create(self, serializer):
@@ -17,16 +17,17 @@ class ReviewViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, title=title)
     
     def get_queryset(self):
+        print("хз1")
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        print("хз")
         return title.reviews.all()
 
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
-    queryset = Comments.objects.all()
     serializer_class = CommentsSerializer
-    permissions_classes = [
-        permissions.IsAuthenticated
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly
     ]
 
     def perform_create(self, serializer):

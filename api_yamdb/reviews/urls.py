@@ -6,7 +6,7 @@ from .views import ReviewViewSet, CommentsViewSet
 
 router = routers.DefaultRouter()
 router.register(
-    r'^titles/(?P<title_id>\d+)/reviews',
+    r'titles/(?P<title_id>\d+)/reviews',
     ReviewViewSet,
     basename='review'
 )
