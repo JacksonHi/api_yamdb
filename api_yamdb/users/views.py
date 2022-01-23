@@ -28,13 +28,14 @@ class SignUpAPI(APIView):
                 subject='Verificate registration on YaMDB',
                 message=f'Verificate your email clicking {verification_code}',
                 from_email='master@yamdb.com',
-                recipient_list=serializer.data['email'],
+                recipient_list=(serializer.data['email'],),
             )
             return Response(
                 {'email': serializer.data['email'],
                  'username': serializer.data['username']},
                 status=status.HTTP_200_OK
             )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetTokenAPI(APIView):
@@ -43,16 +44,14 @@ class GetTokenAPI(APIView):
 
     def post(self, request):
         serializer = TokenSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             user = get_object_or_404(User, username=serializer.data['username'])
             if default_token_generator.check_token(user, serializer.data['verification_code']):
                 access_token = AccessToken.for_user(user)
                 return Response(
                     {'token': access_token}, status=status.HTTP_200_OK
                 )
-            return Response({
-                'verification_code': 'Invalid verification code'},
-                status=status.HTTP_400_BAD_REQUEST)
+        return Response({'verification_code': 'Invalid verification code'},status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserDataAPI(APIView):
