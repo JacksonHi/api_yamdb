@@ -20,7 +20,12 @@ class User(AbstractUser):
         null=False,
         max_length=10
     )
-    # role = models.TextField(
-    #     ROLES,
-    #     blank = True,
-    # )
+    username = models.CharField(
+        max_length=200,
+        unique=True,
+    )
+
+    REQUIRED_FIELDS = ('email', 'password')
+
+    class Meta:
+        ordering = ('id',)
