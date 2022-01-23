@@ -6,14 +6,26 @@ class Category(models.Model):
     name = models.CharField(max_length=256, verbose_name='Категория')
     slug = models.SlugField(max_length=50, unique=True, blank=True,)
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:50]
         super().save(*args, **kwargs)
 
 
-class Genre(Category):
-    pass
+class Genre(models.Model):
+    name = models.CharField(max_length=256, verbose_name='Жанр')
+    slug = models.SlugField(max_length=50, unique=True, blank=True,)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)[:50]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name[:50]
 
 
 class Title(models.Model):
@@ -42,3 +54,14 @@ class Title(models.Model):
         null=True, blank=True,
         related_name='genre'
     )
+
+    def __str__(self):
+        return self.name[:50]
+
+
+class TitleGenre(models.Model):
+    genre = models.ForeignKey(Genre, on_delete=models.DO_NOTHING)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.title} {self.genre}'
