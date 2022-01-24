@@ -16,6 +16,7 @@ router.register(
     basename='comments'
 )
 
+app_name = 'reviews'
 urlpatterns = [
     path('v1/', include(router.urls)),
 ]

@@ -10,6 +10,7 @@ router.register(r'categories', CategoryViewSet, basename='categories')
 router.register(r'genres', GenreViewSet, basename='genres')
 router.register(r'titles', TitleViewSet, basename='titles')
 
+app_name = 'titles'
 urlpatterns = [
-    url(r'^v1/', include(router.urls)),
+    url('v1/', include(router.urls)),
 ]

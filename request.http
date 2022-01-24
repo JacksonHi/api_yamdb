@@ -1,0 +1,33 @@
+GET  http://127.0.0.1:8000/api/v1/titles/1/reviews/
+
+###
+
+POST  http://127.0.0.1:8000/api/v1/titles/1/reviews/
+Authorization: Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+Content-Type: application/json
+
+{
+    "text": "test text"
+}
+
+###
+
+# новый пользователь
+POST http://127.0.0.1:8000/api/v1/auth/token/
+Content-Type: application/json
+
+{
+    "username": "JacksonHi",
+    "verification_code": "5xp-a0cb6914efcdeb472a26"
+}
+
+###
+
+# получить токен
+POST http://127.0.0.1:8000/api/v1/auth/signup/
+Content-Type: application/json
+
+{
+    "username": "JacksonHi",
+    "email": "afsdf@asdf.ru"
+}
