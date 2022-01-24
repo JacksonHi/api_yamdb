@@ -1,7 +1,14 @@
 from rest_framework import serializers, exceptions
 from rest_framework.validators import UniqueValidator
 
-from users.models import User
+from .models import Review, Comments, User, Category, Genre, Title
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', ' first_name', 'last_name', 'role')
+
 
 class TokenSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=200, required=True)
@@ -44,3 +51,43 @@ class StandartUserSerializer(serializers.ModelSerializer):
         if value == 'me':
             raise serializers.ValidationError('"me" is invalid username')
         return value
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class GenreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Genre
+        fields = '__all__'
+
+class TitleSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Category.objects.all(),
+    )
+    genre = serializers.SlugRelatedField(
+        slug_field='slug', queryset=Genre.objects.all(), many=True
+    )
+
+    class Meta:
+        model = Title
+        fields = '__all__'
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    
+    class Meta:
+        model = Review
+        fields = ('id', 'text', 'author', 'score', 'pub_date')
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+
+    class Meta:
+        model = Comments
+        fields = '__all__'
