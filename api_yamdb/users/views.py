@@ -49,7 +49,7 @@ class GetTokenAPI(APIView):
             if default_token_generator.check_token(user, serializer.data['verification_code']):
                 access_token = AccessToken.for_user(user)
                 return Response(
-                    {'token': access_token}, status=status.HTTP_200_OK
+                    {'token': str(access_token)}, status=status.HTTP_200_OK
                 )
         return Response({'verification_code': 'Invalid verification code'},status=status.HTTP_400_BAD_REQUEST)
 

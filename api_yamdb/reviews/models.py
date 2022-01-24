@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 from django.contrib.auth import get_user_model
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from titles.models import Title
 
@@ -14,8 +14,8 @@ class Review(models.Model):
     score = models.IntegerField(
         'оценка',
         validators=[
-            MaxLengthValidator(10, 'максимальная оценка 10'),
-            MinLengthValidator(1, 'минимальная оценка 1')
+            MinValueValidator(1, 'минимальная оценка 1'),
+            MaxValueValidator(10, 'максимальная оценка 10')
         ]
     )
     pub_date = models.DateTimeField('дата публикации', auto_now_add=True)
