@@ -1,7 +1,6 @@
-from django.http import response
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework.response import Response
 
 from titles.models import Title
 from .models import Review
@@ -12,7 +11,6 @@ from .permissions import IsAuthorOrAdminOrModerator
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthorOrAdminOrModerator]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
@@ -21,6 +19,11 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
         serializer.save(author=self.request.user, title=title)
+
+    """def retrieve(self, request, *args, **kwargs):
+        revi = get_object_or_404(Review, pk=self.kwargs.get('title_id'))
+        serializer = ReviewSerializer(revi)
+        return Response(serializer.data)"""
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
