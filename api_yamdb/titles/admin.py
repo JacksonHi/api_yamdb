@@ -9,7 +9,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'year', 'raiting', 'description',
-                    'category', 'genre')
+                    'category')
 
 
 class GenreAdmin(admin.ModelAdmin):

@@ -49,11 +49,7 @@ class Title(models.Model):
         null=True, blank=True,
         related_name='category'
     )
-    genre = models.ForeignKey(
-        Genre, on_delete=models.SET_NULL,
-        null=True, blank=True,
-        related_name='genre'
-    )
+    genre = models.ManyToManyField(Genre, through='TitleGenre')
 
     def __str__(self):
         return self.name[:50]
