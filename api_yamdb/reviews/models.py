@@ -113,8 +113,8 @@ class TitleGenre(models.Model):
 
 
 class Review(models.Model):
-    text = models.TextField('текст')
-    author = models.ForeignKey(User, models.CASCADE, related_name='reviews')
+    text = models.TextField(verbose_name='текст')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     score = models.IntegerField(
         'оценка',
         validators=[
@@ -122,8 +122,8 @@ class Review(models.Model):
             MaxValueValidator(10, 'максимальная оценка 10')
         ]
     )
-    pub_date = models.DateTimeField('дата публикации', auto_now_add=True)
-    title = models.ForeignKey(Title, models.CASCADE, related_name='reviews')
+    pub_date = models.DateTimeField(verbose_name='дата публикации', auto_now_add=True)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE, related_name='reviews')
 
     """class Meta:
         constraints = [
@@ -136,9 +136,9 @@ class Review(models.Model):
 
 class Comments(models.Model):
     text = models.TextField('текст')
-    author = models.ForeignKey(User, models.CASCADE, related_name='comments')
-    pub_date = models.DateTimeField('дата публикации', auto_now_add=True)
-    review = models.ForeignKey(Review, models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    pub_date = models.DateTimeField(verbose_name='дата публикации', auto_now_add=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
 
     def __str__(self):
         return self.text

@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'data.apps.DataConfig',
+    'reviews.apps.ReviewsConfig',
     'rest_framework',
     'djoser',
 ]
@@ -108,7 +109,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
 #переопределяем модель пользователя
-AUTH_USER_MODEL = 'data.User'
+AUTH_USER_MODEL = 'reviews.User'
 
 
 #настройки токенов

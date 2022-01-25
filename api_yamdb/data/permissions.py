@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import ROLE_ADMIN
+from reviews.models import ROLE_ADMIN
 
 MODERATOR_METHODS = ('PATCH', 'DELETE')
 

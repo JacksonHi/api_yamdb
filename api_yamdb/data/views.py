@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 
-from .models import Title, Review, Category, Genre, Title
+
 from .serializers import ReviewSerializer, CommentsSerializer, CategorySerializer, GenreSerializer
 from .permissions import IsAuthorOrAdminOrModerator, IsAdmin, AdminOrReadOnly, IsAdminPe, OwnResourcePermission, IsAdminOrReadOnly, IsAuthorOrModerator
 
@@ -18,8 +18,8 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from .serializers import AdminSerializer, StandartUserSerializer, TokenSerializer, CategorySerializer, GenreSerializer, TitleSerializer
 from .mixins import BaseViewSet
+from reviews.models import Title, Review, Category, Genre, Title, User
 
-from .models import User
 
 
 class SignUpAPI(APIView):
@@ -126,6 +126,12 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id',))
+        reviews = self.request.user.reviews
+        if reviews.filter(title=title).exists():
+            raise serializers.ValidationError(
+                detail="Вы уже делали ревью на это произведение!",
+                code=status.HTTP_400_BAD_REQUEST
+            )
         serializer.save(author=self.request.user, title=title)
 
 
