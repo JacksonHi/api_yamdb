@@ -125,10 +125,10 @@ class Review(models.Model):
     pub_date = models.DateTimeField(verbose_name='дата публикации', auto_now_add=True)
     title = models.ForeignKey(Title, on_delete=models.CASCADE, related_name='reviews')
 
-    """class Meta:
+    class Meta:
         constraints = [
             UniqueConstraint(fields=['author', 'title'], name='constraints_review')
-        ]"""
+        ]
     
     def __str__(self):
         return self.text
