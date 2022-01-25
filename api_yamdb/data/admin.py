@@ -16,7 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class TitleAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'year', 'raiting', 'description',
+    list_display = ('pk', 'name', 'year', 'rating', 'description',
                     'category')
 
 

@@ -86,7 +86,7 @@ class Title(models.Model):
         verbose_name='Год выпуска',
         blank=True, null=True
     )
-    raiting = models.IntegerField(
+    rating = models.IntegerField(
         verbose_name='Рейтинг',
         blank=True, null=True
     )
@@ -125,10 +125,10 @@ class Review(models.Model):
     pub_date = models.DateTimeField('дата публикации', auto_now_add=True)
     title = models.ForeignKey(Title, models.CASCADE, related_name='reviews')
 
-    class Meta:
+    """class Meta:
         constraints = [
             UniqueConstraint(fields=['author', 'title'], name='constraints_review')
-        ]
+        ]"""
     
     def __str__(self):
         return self.text
