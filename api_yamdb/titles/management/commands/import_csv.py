@@ -1,10 +1,11 @@
-import os
 import csv
+import os
 
 from django.core.management.base import BaseCommand
-from titles.models import Category, Genre, Title, TitleGenre
 from reviews.models import Comments, Review
+
 from users.models import User
+from titles.models import Category, Genre, Title, TitleGenre
 
 
 def file_load(model_orm, file_name_csv):

@@ -7,7 +7,7 @@ class BaseViewSet(viewsets.ModelViewSet):
 
 
 class ListCreateViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
-                        viewsets.GenericViewSet):
+                        mixins.DestroyModelMixin, viewsets.GenericViewSet):
     pagination_class = LimitOffsetPagination
 
 

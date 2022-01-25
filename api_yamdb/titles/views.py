@@ -1,14 +1,14 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
+from titles.mixins import BaseViewSet, ListCreateViewSet
 from titles.models import Category, Genre, Title
-from titles.mixins import BaseViewSet
-from titles.serializers import (
-    CategorySerializer, GenreSerializer, TitleSerializer
-)
 from titles.permissions import AdminOrReadOnly
+from titles.serializers import (CategorySerializer, GenreSerializer,
+                                TitleSerializer)
 
 
-class CategoryViewSet(BaseViewSet):
+class CategoryViewSet(ListCreateViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -17,7 +17,7 @@ class CategoryViewSet(BaseViewSet):
     lookup_field = 'slug'
 
 
-class GenreViewSet(BaseViewSet):
+class GenreViewSet(ListCreateViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
@@ -30,6 +30,22 @@ class TitleViewSet(BaseViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('category__slug', 'genre__slug',
-                     'name', 'year')
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('year', )
+
+    def get_queryset(self):
+        queryset = Title.objects.all()
+
+        genre = self.request.query_params.get('genre')
+        if genre is not None:
+            queryset = queryset.filter(genre__slug=genre)
+
+        category = self.request.query_params.get('category')
+        if category is not None:
+            queryset = queryset.filter(category__slug=category)
+
+        name = self.request.query_params.get('name')
+        if name is not None:
+            queryset = queryset.filter(name__contains=name)
+
+        return queryset

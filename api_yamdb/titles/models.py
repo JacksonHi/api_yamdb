@@ -11,7 +11,7 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)[:50]
+            self.slug = slugify(self.name[:50])
         super().save(*args, **kwargs)
 
 
@@ -19,13 +19,13 @@ class Genre(models.Model):
     name = models.CharField(max_length=256, verbose_name='Жанр')
     slug = models.SlugField(max_length=50, unique=True, blank=True,)
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)[:50]
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.name[:50]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name[:50])
+        super().save(*args, **kwargs)
 
 
 class Title(models.Model):
@@ -49,23 +49,7 @@ class Title(models.Model):
         null=True, blank=True,
         related_name='category'
     )
-    genre = models.ManyToManyField(Genre, through='TitleGenre')
+    genre = models.ManyToManyField(Genre)
 
     def __str__(self):
         return self.name[:50]
-
-
-class TitleGenre(models.Model):
-    genre = models.ForeignKey(Genre, on_delete=models.DO_NOTHING)
-    title = models.ForeignKey(Title, on_delete=models.CASCADE)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['genre', 'title'],
-                name='unique_genre_title'
-            )
-        ]
-
-    def __str__(self):
-        return f'{self.title} {self.genre}'

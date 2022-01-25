@@ -27,7 +27,7 @@ class Test04TitleAPI:
         )
         data = {'name': 'Поворот туда', 'year': 2000, 'genre': [genres[0]['slug'], genres[1]['slug']],
                 'category': categories[0]['slug'], 'description': 'Крутое пике'}
-        response = admin_client.post('/api/v1/titles/', data=data)
+        response = admin_client.post('/api/v1/titles/', data=data)        
         assert response.status_code == 201, (
             'Проверьте, что при POST запросе `/api/v1/titles/` с правильными данными возвращает статус 201'
         )
@@ -93,6 +93,7 @@ class Test04TitleAPI:
             'Значение параметра `results` неправильное, значение `category` неправильное '
             'или не сохранилось при POST запросе.'
         )
+
         assert genres[0] in title.get('genre', []) and genres[1] in title.get('genre', []), (
             'Проверьте, что при GET запросе `/api/v1/titles/` возвращаете данные с пагинацией. '
             'Значение параметра `results` неправильное, значение `genre` неправильное '
@@ -116,6 +117,7 @@ class Test04TitleAPI:
                 'category': categories[1]['slug'], 'description': 'Крутое пике'}
         admin_client.post('/api/v1/titles/', data=data)
         response = admin_client.get(f'/api/v1/titles/?genre={genres[1]["slug"]}')
+        
         data = response.json()
         assert len(data['results']) == 2, (
             'Проверьте, что при GET запросе `/api/v1/titles/` фильтуется по `genre` параметру `slug` жанра'
