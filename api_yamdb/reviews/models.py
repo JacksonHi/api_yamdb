@@ -1,25 +1,122 @@
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
-from django.contrib.auth import get_user_model
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import AbstractUser, UserManager
+from pytils.translit import slugify
 
-from titles.models import Title
 
-User = get_user_model()
+ROLE_USER = 'user'
+ROLE_MODERATOR = 'moderator'
+ROLE_ADMIN = 'admin'
+
+ROLES = [
+    (ROLE_USER, 'Пользователь'),
+    (ROLE_MODERATOR, 'Модератор'),
+    (ROLE_ADMIN, 'Администратор')
+]
+
+
+class CustomUserManager(UserManager):
+    
+    def create_user(self, username, email, password,**extra_fields):
+        if not email:
+            raise ValueError('Email is required')
+        if username == 'me':
+            raise ValueError('"me" is invalid username')
+        return super().create_user(username, email=email, password=password, **extra_fields)
+
+    def create_superuser(self, username, email, password, role, **extra_fields):
+        return super().create_superuser(username, email, password, role='admin', **extra_fields)
+
+
+class User(AbstractUser):
+
+    role = models.CharField(
+        choices=ROLES,
+        default='user',
+        blank=False,
+        null=False,
+        max_length=10
+    )
+    username = models.CharField(
+        max_length=200,
+        unique=True,
+    )
+    bio = models.TextField(blank=True)
+    objects = CustomUserManager()
+
+    REQUIRED_FIELDS = ('email', 'password')
+
+    class Meta:
+        ordering = ('id',)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=256, verbose_name='Категория')
+    slug = models.SlugField(max_length=50, unique=True, blank=True,)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name[:50])
+        super().save(*args, **kwargs)
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=256, verbose_name='Жанр')
+    slug = models.SlugField(max_length=50, unique=True, blank=True,)
+
+    def __str__(self):
+        return self.name[:50]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name[:50])
+        super().save(*args, **kwargs)
+
+
+class Title(models.Model):
+    name = models.CharField(
+        max_length=256, verbose_name='Название',
+        blank=False, null=False
+    )
+    year = models.IntegerField(
+        verbose_name='Год выпуска',
+        blank=True, null=True
+    )
+    rating = models.IntegerField(
+        verbose_name='Рейтинг',
+        blank=True, null=True
+    )
+    description = models.TextField(
+        verbose_name='Описание'
+    )
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='category'
+    )
+    genre = models.ManyToManyField(Genre)
+
+    def __str__(self):
+        return self.name[:50]
+
 
 
 class Review(models.Model):
-    text = models.TextField('текст')
-    author = models.ForeignKey(User, models.CASCADE, related_name='reviews')
+    text = models.TextField(verbose_name='текст')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     score = models.IntegerField(
         'оценка',
         validators=[
-            MaxLengthValidator(10, 'максимальная оценка 10'),
-            MinLengthValidator(1, 'минимальная оценка 1')
+            MinValueValidator(1, 'минимальная оценка 1'),
+            MaxValueValidator(10, 'максимальная оценка 10')
         ]
     )
-    pub_date = models.DateTimeField('дата публикации', auto_now_add=True)
-    title = models.ForeignKey(Title, models.CASCADE, related_name='reviews')
+    pub_date = models.DateTimeField(verbose_name='дата публикации', auto_now_add=True)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE, related_name='reviews')
 
     class Meta:
         constraints = [
@@ -32,9 +129,9 @@ class Review(models.Model):
 
 class Comments(models.Model):
     text = models.TextField('текст')
-    author = models.ForeignKey(User, models.CASCADE, related_name='comments')
-    pub_date = models.DateTimeField('дата публикации', auto_now_add=True)
-    review = models.ForeignKey(Review, models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    pub_date = models.DateTimeField(verbose_name='дата публикации', auto_now_add=True)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
 
     def __str__(self):
         return self.text

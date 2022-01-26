@@ -26,8 +26,8 @@ INSTALLED_APPS = [
     'django_filters',
     'reviews.apps.ReviewsConfig',
     'api.apps.ApiConfig',
-    'users.apps.UsersConfig',
-    'titles.apps.TitlesConfig',
+    'data.apps.DataConfig',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +110,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
 #переопределяем модель пользователя
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'reviews.User'
+
 
 #настройки токенов
 SIMPLE_JWT = {

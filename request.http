@@ -1,0 +1,57 @@
+GET  http://127.0.0.1:8000/api/v1/titles/1/reviews/
+
+###
+
+GET  http://127.0.0.1:8000/api/v1/titles/1/reviews/4/
+
+###
+
+POST  http://127.0.0.1:8000/api/v1/titles/1/reviews/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ1NjU4OTUyLCJqdGkiOiI5MTE5NTNlMjM2MGM0OWE5OTIxNjZiYzNlM2I3MzhkMiIsInVzZXJfaWQiOjF9.bgeunjJ30RJe5wa4gF3Z-ZciF7a0-Z-Tv9BttNAi9vk
+Content-Type: application/json
+
+{
+    "text": "test text",
+    "score": 5
+}
+
+###
+
+POST  http://127.0.0.1:8000/api/v1/titles/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ1NjU4OTUyLCJqdGkiOiI5MTE5NTNlMjM2MGM0OWE5OTIxNjZiYzNlM2I3MzhkMiIsInVzZXJfaWQiOjF9.bgeunjJ30RJe5wa4gF3Z-ZciF7a0-Z-Tv9BttNAi9vk
+Content-Type: application/json
+
+{
+    "text": "test text",
+    "score": 5
+}
+
+###
+
+DELETE  http://127.0.0.1:8000/api/v1/titles/1/reviews/77/
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ1NjU4OTUyLCJqdGkiOiI5MTE5NTNlMjM2MGM0OWE5OTIxNjZiYzNlM2I3MzhkMiIsInVzZXJfaWQiOjF9.bgeunjJ30RJe5wa4gF3Z-ZciF7a0-Z-Tv9BttNAi9vk
+Content-Type: application/json
+
+###
+
+# новый пользователь
+POST http://127.0.0.1:8000/api/v1/auth/token/
+Content-Type: application/json
+
+{
+    "username": "JacksonHi1",
+    "verification_code": "5xq-20bb00070be857c9094b"
+}
+
+#eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ1NjU4OTUyLCJqdGkiOiI5MTE5NTNlMjM2MGM0OWE5OTIxNjZiYzNlM2I3MzhkMiIsInVzZXJfaWQiOjF9.bgeunjJ30RJe5wa4gF3Z-ZciF7a0-Z-Tv9BttNAi9vk
+
+###
+
+# получить токен
+POST http://127.0.0.1:8000/api/v1/auth/signup/
+Content-Type: application/json
+
+{
+    "username": "JacksonHi1",
+    "email": "afsdf@asdfs.ru"
+}
