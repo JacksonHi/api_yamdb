@@ -147,4 +147,7 @@ dmypy.json
 
 # папки со статикой и медиа
 media/
-
+env_api_yamdb/
+.env_api_yamdb/
+Archive/
+.Archive/
