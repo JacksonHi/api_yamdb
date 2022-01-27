@@ -3,9 +3,10 @@ from rest_framework import filters
 
 from api.mixins import BaseViewSet, ListCreateViewSet
 from api.permissions import AdminOrReadOnly
+from titles.filters import TitleFilter
 from titles.models import Category, Genre, Title
 from titles.serializers import (CategorySerializer, GenreSerializer,
-                                TitleSerializer)
+                                TitleSerializerRead, TitleSerializerWrite)
 
 
 class CategoryViewSet(ListCreateViewSet):
@@ -29,23 +30,11 @@ class GenreViewSet(ListCreateViewSet):
 class TitleViewSet(BaseViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('year', )
+    filterset_class = TitleFilter
 
-    def get_queryset(self):
-        queryset = Title.objects.all()
-
-        genre = self.request.query_params.get('genre')
-        if genre is not None:
-            queryset = queryset.filter(genre__slug=genre)
-
-        category = self.request.query_params.get('category')
-        if category is not None:
-            queryset = queryset.filter(category__slug=category)
-
-        name = self.request.query_params.get('name')
-        if name is not None:
-            queryset = queryset.filter(name__contains=name)
-
-        return queryset
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return TitleSerializerRead
+        else:
+            return TitleSerializerWrite
