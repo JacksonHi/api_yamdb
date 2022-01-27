@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     'django_filters',
     'reviews.apps.ReviewsConfig',
     'api.apps.ApiConfig',
-    'data.apps.DataConfig',
+    'data.apps.TitlesConfig',
+    'data.apps.UsersConfig',
     'djoser',
 ]
 

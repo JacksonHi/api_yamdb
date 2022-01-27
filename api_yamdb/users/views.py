@@ -9,9 +9,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import AccessToken
 
 from api.serializers import AdminSerializer, StandartUserSerializer, TokenSerializer
-from api import permissions
+from api.permissions import IsAdmin
 
-from .models import User
+from users.models import User
 
 
 class SignUpAPI(APIView):
@@ -75,6 +75,6 @@ class AdminDataAPI(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminSerializer
     lookup_field = 'username'
-    permission_classes = (permissions.IsAdmin,)
+    permission_classes = (IsAdmin,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
