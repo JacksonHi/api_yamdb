@@ -1,17 +1,16 @@
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers, viewsets, status
-from reviews.serializers import ReviewSerializer, CommentsSerializer
+from rest_framework import serializers, status, viewsets
+from rest_framework.pagination import LimitOffsetPagination
+
 from api.permissions import IsAuthorOrAdminOrModerator
 from reviews.models import Review
+from reviews.serializers import CommentsSerializer, ReviewSerializer
 from titles.models import Title
-from rest_framework.pagination import LimitOffsetPagination
-from django.db.models import Avg
-
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    #permission_classes = (IsAdminOrReadOnly | IsAuthorOrModerator,)
     permission_classes = [IsAuthorOrAdminOrModerator]
     pagination_class = LimitOffsetPagination
 
@@ -32,15 +31,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
         agg_score = Review.objects.filter(title=title).aggregate(Avg('score'))
         title.rating = agg_score['score__avg']
         title.save(update_fields=['rating'])
-    
+
     def perform_update(self, serializer):
         serializer.save()
         title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
         agg_score = Review.objects.filter(title=title).aggregate(Avg('score'))
         title.rating = agg_score['score__avg']
         title.save(update_fields=['rating'])
-
-
 
 
 class CommentsViewSet(viewsets.ModelViewSet):

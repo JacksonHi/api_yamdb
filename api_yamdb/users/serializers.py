@@ -1,7 +1,7 @@
-from rest_framework import serializers, exceptions, validators
+from rest_framework import exceptions, serializers
 from rest_framework.validators import UniqueValidator
-from users.models import User
 
+from users.models import User
 
 
 class TokenSerializer(serializers.Serializer):
@@ -13,7 +13,7 @@ class TokenSerializer(serializers.Serializer):
             raise exceptions.NotFound(f'There is no user {value}')
         return value
 
-    
+
 class AdminSerializer(serializers.ModelSerializer):
     """Роль admin."""
     email = serializers.EmailField(
@@ -22,7 +22,8 @@ class AdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'bio', 'role')
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role')
 
     def validate_username(self, value):
         if value == 'me':
@@ -38,7 +39,8 @@ class StandartUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'bio', 'role')
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role')
         read_only_fields = ('role',)
 
     def validate_username(self, value):

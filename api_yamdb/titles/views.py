@@ -1,8 +1,11 @@
-from api.mixins import BaseViewSet, ListCreateViewSet
-from titles.models import Category, Genre, Title
-from api.permissions import AdminOrReadOnly
-from titles.serializers import CategorySerializer, GenreSerializer, TitleSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+
+from api.mixins import BaseViewSet, ListCreateViewSet
+from api.permissions import AdminOrReadOnly
+from titles.models import Category, Genre, Title
+from titles.serializers import (CategorySerializer, GenreSerializer,
+                                TitleSerializer)
 
 
 class CategoryViewSet(ListCreateViewSet):
@@ -27,7 +30,7 @@ class TitleViewSet(BaseViewSet):
     permission_classes = (AdminOrReadOnly,)
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
-    #filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('year', )
 
     def get_queryset(self):

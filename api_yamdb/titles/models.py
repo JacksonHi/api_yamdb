@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.text import slugify
 
 
-
 class Category(models.Model):
     name = models.CharField(max_length=256, verbose_name='Категория')
     slug = models.SlugField(max_length=50, unique=True, blank=True,)

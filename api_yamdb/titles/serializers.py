@@ -1,5 +1,6 @@
-from titles.models import Category, Genre, Title
 from rest_framework import serializers
+
+from titles.models import Category, Genre, Title
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -20,7 +21,7 @@ class TitleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Title
-        fields = ['id', 'name', 'year', 'rating', 'description', 'category', 'genre']
+        fields = '__all__'
 
     def create(self, validated_data):
 

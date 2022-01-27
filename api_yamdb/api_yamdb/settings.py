@@ -26,9 +26,8 @@ INSTALLED_APPS = [
     'django_filters',
     'reviews.apps.ReviewsConfig',
     'api.apps.ApiConfig',
-    'data.apps.TitlesConfig',
-    'data.apps.UsersConfig',
-    'djoser',
+    'titles.apps.TitlesConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -110,17 +109,17 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 
-#переопределяем модель пользователя
-AUTH_USER_MODEL = 'reviews.User'
+# переопределяем модель пользователя
+AUTH_USER_MODEL = 'users.User'
 
 
-#настройки токенов
+# настройки токенов
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-#настройка для отправки писем
+# настройка для отправки писем
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 REST_FRAMEWORK = {
