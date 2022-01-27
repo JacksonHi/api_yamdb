@@ -3,6 +3,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Avg
 
 
 from .serializers import ReviewSerializer, CommentsSerializer, CategorySerializer, GenreSerializer
@@ -152,6 +153,19 @@ class ReviewViewSet(viewsets.ModelViewSet):
                 code=status.HTTP_400_BAD_REQUEST
             )
         serializer.save(author=self.request.user, title=title)
+
+        agg_score = Review.objects.filter(title=title).aggregate(Avg('score'))
+        title.rating = agg_score['score__avg']
+        title.save(update_fields=['rating'])
+    
+    def perform_update(self, serializer):
+        serializer.save()
+        title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
+        agg_score = Review.objects.filter(title=title).aggregate(Avg('score'))
+        title.rating = agg_score['score__avg']
+        title.save(update_fields=['rating'])
+
+
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
