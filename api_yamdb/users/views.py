@@ -10,6 +10,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import AccessToken
 
 from api.permissions import IsAdmin
+from api_yamdb.settings import FROM_EMAIL
 from users.models import User
 from users.serializers import (AdminSerializer, StandartUserSerializer,
                                TokenSerializer)
@@ -29,7 +30,7 @@ class SignUpAPI(APIView):
             send_mail(
                 subject='Verificate registration on YaMDB',
                 message=f'Verificate your email clicking {verification_code}',
-                from_email='master@yamdb.com',
+                from_email=FROM_EMAIL,
                 recipient_list=(serializer.data['email'],),
             )
             return Response(

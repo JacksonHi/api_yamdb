@@ -35,16 +35,31 @@ class User(AbstractUser):
         default='user',
         blank=False,
         null=False,
-        max_length=10
+        max_length=10,
+        verbose_name='Роль',
     )
     username = models.CharField(
         max_length=200,
         unique=True,
+        verbose_name='Юзернейм',
     )
-    bio = models.TextField(blank=True)
+    bio = models.TextField(
+        blank=True,
+        verbose_name='Биография',
+    )
     objects = CustomUserManager()
 
     REQUIRED_FIELDS = ('email', 'password')
 
     class Meta:
         ordering = ('id',)
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    @property
+    def is_admin(self):
+        return self.role == ROLES[2][0]
+
+    @property
+    def is_moderator(self):
+        return self.role == ROLES[1][0]
