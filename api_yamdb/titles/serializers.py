@@ -19,6 +19,7 @@ class GenreSerializer(serializers.ModelSerializer):
 class TitleSerializerRead(serializers.ModelSerializer):
     category = CategorySerializer(many=False, read_only=True)
     genre = GenreSerializer(many=True, read_only=True)
+    rating = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Title
@@ -35,7 +36,9 @@ class TitleSerializerWrite(serializers.ModelSerializer):
         queryset=Genre.objects.all(),
         many=True
     )
+    rating = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Title
-        exclude = ('rating',)
+        fields = '__all__'
+        

@@ -8,7 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class TitleAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'year', 'rating', 'description',
+    list_display = ('pk', 'name', 'year', 'description',
                     'category')
 
 

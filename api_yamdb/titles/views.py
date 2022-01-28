@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from django.db.models import Avg
 
 from api.mixins import BaseViewSet, ListCreateViewSet
 from api.permissions import AdminOrReadOnly
@@ -29,7 +30,7 @@ class GenreViewSet(ListCreateViewSet):
 
 class TitleViewSet(BaseViewSet):
     permission_classes = (AdminOrReadOnly,)
-    queryset = Title.objects.all()
+    queryset = Title.objects.annotate(rating=Avg('reviews__score'))
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
 
