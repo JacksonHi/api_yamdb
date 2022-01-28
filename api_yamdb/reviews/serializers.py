@@ -1,13 +1,13 @@
-from rest_framework import serializers, validators
+from rest_framework import serializers
 
-from reviews.models import Comments, Review, Title, User
+from reviews.models import Comments, Review
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        
         slug_field='username',
-        read_only=True
+        read_only=True,
+        default=serializers.CurrentUserDefault(),
     )
     title = serializers.SlugRelatedField(
         slug_field='name',
@@ -16,21 +16,26 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'text', 'author', 'score', 'pub_date', 'title',)
+        fields = ('id', 'text', 'author', 'score', 'pub_date', 'title')
+        read_only_fields = ('id', 'author', 'title')
 
-        validators = [
-            validators.UniqueTogetherValidator(
-                queryset=Review.objects.all(),
-                fields=['author', 'title'],
-                message='нельзя оставить отзыв дважды'
-            )
-        ]
+    def create(self, validated_data):
+        title_id = self.context['view'].kwargs.get('title_id')
+        if Review.objects.filter(
+                title=title_id,
+                author=self.context['request'].user).exists():
+            raise serializers.ValidationError('нельзя оставить отзыв дважды')
+        return Review.objects.create(**validated_data)
 
 
 class CommentsSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        slug_field='username', read_only=True)
+        slug_field='username',
+        read_only=True,
+        default=serializers.CurrentUserDefault(),
+    )
 
     class Meta:
         model = Comments
-        fields = ('id', 'text', 'author', 'pub_date')
+        fields = '__all__'
+        read_only_fields = ('id', 'review')

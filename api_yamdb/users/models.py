@@ -35,11 +35,11 @@ class User(AbstractUser):
         default='user',
         blank=False,
         null=False,
-        max_length=10,
+        max_length=200,
         verbose_name='Роль',
     )
     username = models.CharField(
-        max_length=200,
+        max_length=150,
         unique=True,
         verbose_name='Юзернейм',
     )
@@ -63,3 +63,8 @@ class User(AbstractUser):
     @property
     def is_moderator(self):
         return self.role == ROLES[1][0]
+
+
+User._meta.get_field('last_name').max_length = 150
+User._meta.get_field('first_name').max_length = 150
+User._meta.get_field('email').max_length = 254
