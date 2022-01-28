@@ -33,9 +33,7 @@ class AdminSerializer(serializers.ModelSerializer):
 
 class StandartUserSerializer(serializers.ModelSerializer):
     """Роль user."""
-    email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
+    email = serializers.EmailField()
 
     class Meta:
         model = User

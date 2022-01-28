@@ -26,10 +26,22 @@ class SignUpAPI(APIView):
         # serializer.save() без проверки is_valid
         if not serializer.is_valid(raise_exception=True):
             raise ValidationError('invalid data')
-        serializer.save()
-        user = User.objects.get_or_create(
-            username=serializer.data['username']
-        )[0]
+        user, was_created = User.objects.get_or_create(
+            email=serializer.data['email'],
+        )
+        if not was_created:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user, was_created = User.objects.get_or_create(
+            username=serializer.data['username'],
+        )
+        if not was_created:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         verification_code = default_token_generator.make_token(user)
         send_mail(
             subject='Verificate registration on YaMDB',
