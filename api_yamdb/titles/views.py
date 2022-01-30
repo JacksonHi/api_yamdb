@@ -37,5 +37,4 @@ class TitleViewSet(BaseViewSet):
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
             return TitleSerializerRead
-        else:
-            return TitleSerializerWrite
+        return TitleSerializerWrite

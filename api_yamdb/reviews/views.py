@@ -33,7 +33,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
         review = get_object_or_404(
             Review,
             pk=review_id,
-            title_id=title_id,
+            title__id=title_id,
         )
         serializer.save(author=self.request.user, review=review)
 
@@ -43,6 +43,6 @@ class CommentsViewSet(viewsets.ModelViewSet):
         review = get_object_or_404(
             Review,
             pk=review_id,
-            title_id=title_id,
+            title__id=title_id,
         )
         return review.comments.all()
