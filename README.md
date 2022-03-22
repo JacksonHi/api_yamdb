@@ -32,7 +32,7 @@ git clone https://github.com/Drvmnekta/api_yamdb.git
 ```
 
 ```
-cd kittygram
+cd api_yamdb
 ```
 
 Cоздать и активировать виртуальное окружение:
